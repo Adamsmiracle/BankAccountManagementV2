@@ -1,3 +1,5 @@
+package src.models;
+
 public abstract class Account implements Transactable {
     public static int accountCounter = 0;
 

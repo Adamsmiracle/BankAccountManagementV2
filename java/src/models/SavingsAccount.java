@@ -1,3 +1,7 @@
+package src.models;
+
+import src.services.TransactionManager;
+
 public class SavingsAccount extends Account {
 
     // --- Private Fields

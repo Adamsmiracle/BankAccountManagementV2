@@ -1,3 +1,10 @@
+package src.services;
+
+import src.models.Account;
+import src.models.CheckingAccount;
+import src.models.SavingsAccount;
+import src.models.Transaction;
+
 public class AccountService {
     private final AccountManager accountManager = AccountManager.getInstance();
     private final TransactionManager transactionManager = TransactionManager.getInstance();

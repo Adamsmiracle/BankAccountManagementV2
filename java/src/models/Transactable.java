@@ -1,3 +1,5 @@
+package src.models;
+
 public interface Transactable {
 
 //    method to be implemented by other classes.

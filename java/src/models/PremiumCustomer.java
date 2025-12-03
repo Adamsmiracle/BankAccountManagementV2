@@ -1,8 +1,14 @@
-public class RegularCustomer extends Customer {
-    public RegularCustomer(String name, int age, String contact, String address) {
+package src.models;
+
+public class PremiumCustomer extends Customer {
+    private double minimumBalance;
+
+    public PremiumCustomer(String name, int age, String contact, String address) {
         super(name, age, contact, address);
     }
-@Override
+
+
+   @Override
     public void displayCustomerDetails() {
         System.out.println("-".repeat(30));
         System.out.println("CUSTOMER DETAILS");
@@ -17,6 +23,24 @@ public class RegularCustomer extends Customer {
 
     @Override
     public String getCustomerType() {
-        return "Regular";
+        return "Premium";
     }
+
+//    Premium customers don't pay monthly fees
+    public boolean hasWaivedFees() {
+        return true;
+    }
+
+    public double getMinimumBalance() {
+        return this.minimumBalance;
+    }
+
+    public boolean setMinimumBalance(double amount){
+        if (amount > 0) {
+            this.minimumBalance = amount;
+            return true;
+        }
+        return false;
+    }
+
 }

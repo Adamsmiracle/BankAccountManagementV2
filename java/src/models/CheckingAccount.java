@@ -1,3 +1,7 @@
+package src.models;
+
+import src.services.TransactionManager;
+
 public class CheckingAccount extends Account {
 
     private double overDraftLimit;
