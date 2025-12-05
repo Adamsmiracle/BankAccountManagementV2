@@ -1,6 +1,6 @@
 package src.models;
 
-public abstract class Account implements Transactable {
+public abstract class Account {
     public static int accountCounter = 0;
 
     //    private field
@@ -76,8 +76,7 @@ public abstract class Account implements Transactable {
     // Abstract method for subclass-specific details
     protected abstract void displaySpecificDetails();
 
-    // IMPLEMENTATION OF TRANSACTABLE INTERFACE
-    @Override
+
     public boolean processTransaction(double amount, String type) {
         if (amount < 0) {
             return false;

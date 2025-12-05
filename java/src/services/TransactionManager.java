@@ -1,5 +1,6 @@
 package src.services;
 
+import src.models.Account;
 import src.models.Transaction;
 
 import java.util.Arrays;
@@ -10,9 +11,16 @@ public class TransactionManager {
     // Singleton instance
     private static final TransactionManager INSTANCE = new TransactionManager();
 
+
+//    static method for getting the instance of the singleton class.
     public static TransactionManager getInstance() {
         return INSTANCE;
     }
+
+//    Ensures only one instance can be created.
+    private TransactionManager() {
+    }
+
 
     private final Transaction[] transactions = new Transaction[200];
     private int transactionCount = 0;
@@ -26,7 +34,8 @@ public class TransactionManager {
         }
     }
 
-    public void viewTransactionsByAccount(String accountNumber) {
+
+    public Account viewTransactionsByAccount(String accountNumber) {
         sortTransaction(); 
 
         System.out.println("\nTRANSACTION HISTORY FOR ACCOUNT: " + accountNumber);
@@ -78,8 +87,9 @@ public class TransactionManager {
             System.out.printf("Total Withdrawals/Transfers Out: $%,.2f\n", accountWithdrawals);
             double net = accountDeposits - accountWithdrawals;
             System.out.printf("Net Change: $%,.2f\n", net);
-            System.out.printf("Total Bank Transactions: %d\n", transactionCount);
+            System.out.printf("Total Bank Transactions: %d\n", getTransactionCount());
         }
+        return null;
     }
 
     public int getTransactionCount(){

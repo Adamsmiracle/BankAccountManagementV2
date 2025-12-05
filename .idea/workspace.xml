@@ -5,23 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11ee06a0-4504-47a4-91cb-40100ef0733a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/java/src/models/exceptions/InvalidAmountException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/git-workflow.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/dto/AccountRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/models/exceptions/InsufficientFundsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/models/exceptions/OverdraftExceededException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/services/StatementGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/test/java/AccountTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/test/java/TransactionManagerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/utils/AccountInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/java/src/utils/ValidationUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AccountManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/services/AccountManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/services/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/CheckingAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/CheckingAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/InputUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/utils/InputUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/PremiumCustomer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/PremiumCustomer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/RegularCustomer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/RegularCustomer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SavingsAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/SavingsAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Transactable.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/Transactable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/Transaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/TransactionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/services/TransactionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/miracle/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/models/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/models/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/services/AccountManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/services/AccountManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/services/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/services/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/services/TransactionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/services/TransactionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/src/utils/InputUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/src/utils/InputUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +33,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -149,7 +151,8 @@
       <workItem from="1764767014379" duration="79000" />
       <workItem from="1764767131990" duration="71000" />
       <workItem from="1764767228699" duration="74000" />
-      <workItem from="1764767359946" duration="3492000" />
+      <workItem from="1764767359946" duration="23209000" />
+      <workItem from="1764848873057" duration="19118000" />
     </task>
     <servers />
   </component>

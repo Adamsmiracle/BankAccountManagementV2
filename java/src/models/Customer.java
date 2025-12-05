@@ -1,6 +1,6 @@
 package src.models;
 
-abstract class Customer {
+public abstract class Customer {
 
 
 //    Static fields;

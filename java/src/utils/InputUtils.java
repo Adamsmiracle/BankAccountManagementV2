@@ -5,12 +5,12 @@ import java.util.Scanner;
 public final class InputUtils {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private InputUtils() {}
 
     public static String readLine(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
+
 
     public static int readInt(String prompt) {
         while (true) {
@@ -24,18 +24,38 @@ public final class InputUtils {
         }
     }
 
-
-    public static String getValidAccountNumber(String transfer) {
-        final String ACCOUNT_REGEX = "^ACC\\d{3}$";
-        while (true) {
-            String account;
-            if (transfer.equalsIgnoreCase("transfer")) {
-                account = readLine("Enter the recipient's Account Number: ");
-            } else {
-                account = readLine("Enter Account Number (e.g., ACC001): ").trim().toUpperCase();
+    public  static double readDouble(String prompt){
+        while(true) {
+            System.out.println(prompt);
+            String s = scanner.nextLine().trim();
+            try{
+                return Float.parseFloat(s);
+            }catch (NumberFormatException e){
+                System.out.println("Invalid Number, please try again");
             }
-            if (account.matches(ACCOUNT_REGEX)) return account;
-            System.out.println("Invalid account format. Account number must be ACC followed by three digits.");
+        }
+
+    }
+
+
+    public static boolean readYesNo(String prompt) {
+        while (true) {
+            System.out.println(prompt);
+            String answer = scanner.nextLine();
+            try{
+                if ( answer.equalsIgnoreCase("y")) {
+                    return true;
+                } else if (answer.equalsIgnoreCase("n")) {
+                    return false;
+                }
+            }catch (Exception e) {
+                System.out.println("Enter a valid option");
+            }
         }
     }
+
+
+
+
+
 }
