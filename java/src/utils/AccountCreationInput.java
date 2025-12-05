@@ -4,8 +4,8 @@ import src.dto.AccountRequest;
 
 import java.util.regex.Pattern;
 import java.util.InvalidPropertiesFormatException;
-
-public class AccountInput {
+import src.model.*;
+public class AccountCreationInput {
 
     private static final String NAME_REGEX = "^[A-Za-z][A-Za-z'-]*(?:\\s[A-Za-z][A-Za-z'-]*)+$";
     private static final String CONTACT_REGEX = "^(?:"+ "0(?:24|54|55|59|25|20|50|26|56|57|23)[\\s-]?\\d{3}[\\s-]?\\d{4}";
@@ -50,22 +50,25 @@ public class AccountInput {
 
 
 //        Read and validate initial deposit
+        double initialDeposit;
         while (true){
-                double initialDeposit = InputUtils.readDouble("Enter initial deposit: $");
+                initialDeposit = InputUtils.readDouble("Enter initial deposit: $");
                 if (initialDeposit <= 0) {
                     System.out.println("Initial deposit must positive. Please try again \n");
                     continue;
                 }
-                if (accountType == 1 && initialDeposit < 500.00){
+                if (accountType == 1 && initialDeposit < SavingsAccount.getMinimumBalance()){
                     System.out.println("Savings account requires minimum initial deposit of $500.00");
                     continue;
                 }
 
-                break;
+            break;
         }
 
 
     }
+
+    return new AccountRequest()
 
 
     //    take username

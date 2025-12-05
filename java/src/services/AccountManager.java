@@ -11,7 +11,7 @@ public class AccountManager {
     public static AccountManager getInstance() {
         return INSTANCE;
     }
-
+https://github.com/Adamsmiracle/BankAccountManagementV2.git
     private  Account[] accounts = new Account[50];
     
     private AccountManager() {
