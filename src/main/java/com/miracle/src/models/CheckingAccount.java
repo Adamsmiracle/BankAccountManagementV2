@@ -1,0 +1,177 @@
+package src.models;
+
+import src.models.exceptions.InvalidAmountException;
+import src.models.exceptions.OverdraftExceededException;
+import src.services.TransactionManager;
+
+public class CheckingAccount extends Account {
+
+    private final double overDraftLimit = 100.00;
+    private final double monthlyFee = 10.00;
+    private double initialDeposit;
+    private final TransactionManager manager = TransactionManager.getInstance();
+
+    public CheckingAccount(Customer customer, double initialDeposit) throws InvalidAmountException {
+        super(customer);
+        this.setStatus("Active");
+        this.initialDeposit = initialDeposit;
+        if (initialDeposit <= 0){
+            throw new InvalidAmountException(initialDeposit);
+        }
+
+        super.setBalance(initialDeposit);
+        // Log initial deposit as a transaction
+        Transaction initialTransaction = new Transaction(
+            this.getAccountNumber(),
+            "Deposit",
+            initialDeposit,
+            initialDeposit
+        );
+        manager.addTransaction(initialTransaction);
+    }
+
+ 
+
+    @Override
+    protected void displaySpecificDetails() {
+        System.out.printf("Overdraft Limit: $%,.2f\n", getOverDraftLimit());
+        
+        if (getCustomer() instanceof PremiumCustomer && ((PremiumCustomer) getCustomer()).hasWaivedFees()) {
+            System.out.println("Monthly Fee: Waived (Premium customer)");
+        } else {
+            System.out.printf("Monthly Fee: $%,.2f\n", getMonthlyFee());
+        }
+    }
+
+    @Override
+    public Transaction deposit(double amount) {
+        if (amount <= 0) {
+            System.out.println("The amount must be a positive value");
+            return null;
+        }
+
+        this.setBalance(this.getBalance() + amount);
+        Transaction newTransaction = new Transaction(
+                this.getAccountNumber(),
+                "Deposit",
+                amount,
+                this.getBalance()
+        );
+        manager.addTransaction(newTransaction);
+        return newTransaction;
+    }
+
+    @Override
+    public String getAccountType() {
+        return "Checking";
+    }
+
+    
+    @Override
+    public Transaction withdraw(double amount) {
+        if (amount <= 0) {
+            System.out.println("Withdrawal amount must be positive.");
+            return null;
+        }
+        if (super.getBalance() - amount >= -overDraftLimit) {
+            this.setBalance(this.getBalance() - amount);
+
+            Transaction newTransaction = new Transaction(
+                this.getAccountNumber(),
+                "Withdrawal",
+                amount,
+                this.getBalance()
+            );
+            manager.addTransaction(newTransaction);
+            
+            System.out.printf("Withdrawal successful. New balance: $%,.2f\n", this.getBalance());
+            return newTransaction;
+
+        } else {
+            System.out.printf("Withdrawal failed. Resulting balance ($%,.2f) would exceed the overdraft limit ($%,.2f).\n",
+                    (super.getBalance() - amount),
+                    overDraftLimit
+            );
+            return null;
+        }
+    }
+
+    public boolean applyMonthlyFee() {
+        Customer c = getCustomer();
+        if (c instanceof PremiumCustomer && ((PremiumCustomer) c).hasWaivedFees()) {
+            System.out.println("Monthly fee waived for Premium customer.");
+            return true;
+        }
+
+        if (super.getBalance() - monthlyFee >= -overDraftLimit) {
+            super.setBalance(super.getBalance() - monthlyFee);
+            return true;
+        }
+        return false;
+    }
+
+    public double getMonthlyFee() {
+        return monthlyFee;
+    }
+
+    public double getOverDraftLimit() {
+        return overDraftLimit;
+    }
+
+
+
+    @Override
+    public Transaction depositWithType(double amount, String transactionType) {
+        if (amount <= 0) {
+            System.out.println("Deposit amount must be positive.");
+            return null;
+        }
+
+        this.setBalance(this.getBalance() + amount);
+
+        Transaction newTransaction = new Transaction(
+                this.getAccountNumber(),
+                transactionType,
+                amount,
+                this.getBalance()
+        );
+
+        manager.addTransaction(newTransaction);
+        return newTransaction;
+    }
+
+
+    @Override
+    public Transaction withdrawWithType(double amount, String transactionType) throws InvalidAmountException, OverdraftExceededException {
+        if (amount <= 0) {
+            throw new InvalidAmountException(amount);
+        }
+        double resultingBalance = this.getBalance() - amount;
+
+        if (resultingBalance < -getOverDraftLimit()) {
+            throw new OverdraftExceededException(this.getBalance(), amount, getOverDraftLimit());
+//            System.out.printf(
+//                    " Withdrawal failed. Resulting balance ($%.2f)" +
+//                            " would violate the overdraft requirement ($%.2f).\n",
+//                    resultingBalance,
+//                    this.getOverDraftLimit()
+//            );
+//            return null;
+        }
+
+        super.setBalance(resultingBalance);
+
+        Transaction newTransaction = new Transaction(
+                this.getAccountNumber(),
+                transactionType,
+                amount,
+                resultingBalance
+        );
+        manager.addTransaction(newTransaction);
+        return newTransaction;
+    }
+
+
+
+
+}
