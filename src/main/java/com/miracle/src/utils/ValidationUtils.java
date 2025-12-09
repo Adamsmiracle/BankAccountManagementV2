@@ -1,9 +1,9 @@
-package src.utils;
+package com.miracle.src.utils;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import static src.utils.InputUtils.*;
+import com.miracle.src.utils.InputUtils.*;
 
 public final class ValidationUtils {
 

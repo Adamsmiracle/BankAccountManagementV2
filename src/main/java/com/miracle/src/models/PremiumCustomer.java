@@ -1,4 +1,4 @@
-package src.models;
+package com.miracle.src.models;
 
 public class PremiumCustomer extends Customer {
     private double minimumBalance;

@@ -1,4 +1,4 @@
-package src.dto;
+package com.miracle.src.dto;
 
 public class TransactionRequest {
     private String userAccountNumber;

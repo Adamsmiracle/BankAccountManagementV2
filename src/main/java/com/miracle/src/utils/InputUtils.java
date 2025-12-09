@@ -1,4 +1,4 @@
-package src.utils;
+package com.miracle.src.utils;
 
 import java.util.Scanner;
 

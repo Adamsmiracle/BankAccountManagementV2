@@ -1,7 +1,7 @@
-package src.utils;
+package com.miracle.src.utils;
 
-import src.dto.AccountRequest;
-import src.models.SavingsAccount;
+import com.miracle.src.dto.AccountRequest;
+import com.miracle.src.models.SavingsAccount;
 
 public class AccountCreationInput {
 

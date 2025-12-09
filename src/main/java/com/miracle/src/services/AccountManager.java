@@ -1,10 +1,11 @@
-package src.services;
+package com.miracle.src.services;
 
-import src.dto.AccountRequest;
-import src.dto.TransactionRequest;
-import src.models.*;
-import src.models.exceptions.InvalidAmountException;
-import src.models.exceptions.OverdraftExceededException;
+import com.miracle.src.dto.AccountRequest;
+import com.miracle.src.dto.TransactionRequest;
+import com.miracle.src.models.*;
+import com.miracle.src.models.exceptions.AccountNotFoundException;
+import com.miracle.src.models.exceptions.InvalidAmountException;
+import com.miracle.src.models.exceptions.OverdraftExceededException;
 
 public class AccountManager {
 
@@ -33,13 +34,17 @@ public class AccountManager {
 
     //    linear search through the Accounts array to find an account using
 //    the account number
-    public Account findAccount(String accountNumber) {
+    public Account findAccount(String accountNumber) throws AccountNotFoundException {
+        if (accountNumber == null || accountNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Account number cannot be null or empty");
+        }
+
         for (int i = 0; i < accountCount; i++) {
             if (accounts[i].getAccountNumber().equalsIgnoreCase(accountNumber)) {
                 return accounts[i];
             }
         }
-        return null;
+        throw new AccountNotFoundException(accountNumber);
     }
 
     //    Get all opened accounts in the banks

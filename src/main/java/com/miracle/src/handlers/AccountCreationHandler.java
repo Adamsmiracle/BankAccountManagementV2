@@ -1,21 +1,22 @@
-package src.handlers;
+package com.miracle.src.handlers;
 
-import src.dto.AccountRequest;
+import com.miracle.src.services.AccountManager;
+import com.miracle.src.dto.AccountRequest;
 
-import src.models.SavingsAccount;
-import src.models.exceptions.InvalidAmountException;
-import src.models.exceptions.OverdraftExceededException;
-import src.services.AccountManager;
-import src.utils.AccountCreationInput;
-import src.utils.InputUtils;
-import src.utils.ValidationUtils;
+import com.miracle.src.models.SavingsAccount;
+import com.miracle.src.models.exceptions.InvalidAmountException;
+import com.miracle.src.models.exceptions.OverdraftExceededException;
+import com.miracle.src.services.AccountManager;
+import com.miracle.src.utils.AccountCreationInput;
+import com.miracle.src.utils.InputUtils;
+import com.miracle.src.utils.ValidationUtils;
 
 
 public class AccountCreationHandler {
-    private final AccountManager accountManager;
+    private final AccountManager accountManager = AccountManager.getInstance();
 
-    public AccountCreationHandler(AccountManager manager) {
-        this.accountManager = manager;
+    public AccountCreationHandler() {
+
     }
 
     public void handleCreateAccount() throws InvalidAmountException, OverdraftExceededException {

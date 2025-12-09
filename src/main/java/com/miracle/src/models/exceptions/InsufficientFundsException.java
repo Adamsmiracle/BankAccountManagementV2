@@ -1,4 +1,4 @@
-package src.models.exceptions;
+package com.miracle.src.models.exceptions;
 
 public class InsufficientFundsException extends RuntimeException {
 

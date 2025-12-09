@@ -1,9 +1,9 @@
-package src.utils;
+package com.miracle.src.utils;
 
-import src.dto.TransactionRequest;
-import src.models.Account;
-import src.models.Transaction;
-import src.services.AccountManager;
+import com.miracle.src.dto.TransactionRequest;
+import com.miracle.src.models.Account;
+import com.miracle.src.models.Transaction;
+import com.miracle.src.services.AccountManager;
 
 import javax.xml.transform.Source;
 

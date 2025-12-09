@@ -1,7 +1,7 @@
-package src.models;
+package com.miracle.src.models;
 
-import src.models.exceptions.InvalidAmountException;
-import src.models.exceptions.OverdraftExceededException;
+import com.miracle.src.models.exceptions.InvalidAmountException;
+import com.miracle.src.models.exceptions.OverdraftExceededException;
 
 public abstract class Account {
     public static int accountCounter = 0;

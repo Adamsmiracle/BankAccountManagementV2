@@ -1,14 +1,15 @@
-package src.handlers;
-import src.dto.TransactionRequest;
-import src.models.exceptions.InvalidAmountException;
-import src.models.exceptions.OverdraftExceededException;
-import src.services.*;
-import src.utils.TransactionProcessingInput;
+package com.miracle.src.handlers;
+import com.miracle.src.services.AccountManager;
+import com.miracle.src.dto.TransactionRequest;
+import com.miracle.src.models.exceptions.InvalidAmountException;
+import com.miracle.src.models.exceptions.OverdraftExceededException;
+import com.miracle.src.services.*;
+import com.miracle.src.utils.TransactionProcessingInput;
 
 public class TransactionHandler {
-    private static AccountManager manager;
-    public TransactionHandler(AccountManager manager) {
-        this.manager = manager;
+    private static AccountManager manager = AccountManager.getInstance();
+    public TransactionHandler() {
+
     }
 
     public void handleTransaction () throws InvalidAmountException, OverdraftExceededException {

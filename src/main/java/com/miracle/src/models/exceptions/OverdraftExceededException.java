@@ -1,5 +1,5 @@
 // src/models/exceptions/OverdraftExceededException.java
-package src.models.exceptions;
+package com.miracle.src.models.exceptions;
 
 public class OverdraftExceededException extends Exception {
     private double balance;

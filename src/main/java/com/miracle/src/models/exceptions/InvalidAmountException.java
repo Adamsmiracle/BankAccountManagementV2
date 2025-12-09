@@ -1,5 +1,5 @@
 // src/models/exceptions/InvalidAmountException.java
-package src.models.exceptions;
+package com.miracle.src.models.exceptions;
 
 public class InvalidAmountException extends Exception {
     private double amount;

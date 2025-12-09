@@ -1,4 +1,4 @@
-package src.models;
+package com.miracle.src.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

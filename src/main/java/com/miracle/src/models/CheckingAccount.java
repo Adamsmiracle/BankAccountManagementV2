@@ -1,8 +1,8 @@
-package src.models;
+package com.miracle.src.models;
 
-import src.models.exceptions.InvalidAmountException;
-import src.models.exceptions.OverdraftExceededException;
-import src.services.TransactionManager;
+import com.miracle.src.models.exceptions.InvalidAmountException;
+import com.miracle.src.models.exceptions.OverdraftExceededException;
+import com.miracle.src.services.TransactionManager;
 
 public class CheckingAccount extends Account {
 

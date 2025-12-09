@@ -1,4 +1,4 @@
-package src.models;
+package com.miracle.src.models;
 
 public interface Transactable {
 

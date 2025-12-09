@@ -1,7 +1,7 @@
-package src.services;
-import src.models.*;
-import src.models.exceptions.AccountNotFoundException;
-import src.utils.InputUtils;
+package com.miracle.src.services;
+import com.miracle.src.models.*;
+import com.miracle.src.models.exceptions.AccountNotFoundException;
+import com.miracle.src.utils.InputUtils;
 
 public class StatementGenerator {
     private static TransactionManager transactionManager = TransactionManager.getInstance();

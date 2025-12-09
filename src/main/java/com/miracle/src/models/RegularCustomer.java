@@ -1,4 +1,4 @@
-package src.models;
+package com.miracle.src.models;
 
 public class RegularCustomer extends Customer {
     public RegularCustomer(String name, int age, String contact, String address) {
