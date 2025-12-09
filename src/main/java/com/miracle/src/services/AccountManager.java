@@ -25,10 +25,15 @@ public class AccountManager {
 
 
     public void addAccount(Account account) {
-        if (accountCount < accounts.length) {
-            accounts[accountCount] = account;
-            accountCount++;
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
         }
+
+        if (accountCount >= accounts.length) {
+            throw new IllegalStateException("Account storage limit reached. Cannot create new account.");
+        }
+
+        accounts[accountCount++] = account;
     }
 
 
