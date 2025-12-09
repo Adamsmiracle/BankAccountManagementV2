@@ -34,14 +34,26 @@ public class TransactionManager {
     private int transactionCount = 0;
 
     public void addTransaction(Transaction transaction) {
-        if (transactionCount < transactions.length) {
-            transactions[transactionCount] = transaction;
-            transactionCount++;
-        } else {
-            System.err.println("Transaction Manager storage limit reached. Cannot record new transaction.");
+        if (transaction == null) {
+            throw new IllegalArgumentException("Transaction cannot be null");
         }
+
+        if (transactionCount >= transactions.length) {
+            throw new IllegalStateException(
+                    "Transaction Manager storage limit reached (" + MAX_TRANSACTION + "). Cannot record new transaction."
+            );
+        }
+
+        transactions[transactionCount++] = transaction;
     }
 
+    // In TransactionManager.java
+    public Transaction getTransaction(int index) {
+        if (index < 0 || index >= transactionCount) {
+            throw new IndexOutOfBoundsException("Invalid transaction index: " + index);
+        }
+        return transactions[index];
+    }
 
     public int getTransactionCount(){
         return transactionCount;

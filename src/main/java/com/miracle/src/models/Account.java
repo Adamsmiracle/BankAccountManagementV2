@@ -20,11 +20,11 @@ public abstract class Account {
     }
 
     // Abstract methods for deposit and withdraw
-    public abstract Transaction deposit(double amount);
-    public abstract Transaction withdraw(double amount) throws InvalidAmountException;
+    public abstract Transaction deposit(double amount) throws InvalidAmountException;
+    public abstract Transaction withdraw(double amount) throws InvalidAmountException, OverdraftExceededException;
     
     // Overloaded methods with transaction type for transfers
-    public abstract Transaction depositWithType(double amount, String transactionType);
+    public abstract Transaction depositWithType(double amount, String transactionType) throws InvalidAmountException;
     public abstract Transaction withdrawWithType(double amount, String transactionType) throws InvalidAmountException, OverdraftExceededException;
 
     // GETTERS
@@ -81,12 +81,16 @@ public abstract class Account {
 
 
     public void processTransaction(double amount, String type) throws InvalidAmountException, OverdraftExceededException {
-        if (amount < 0) {
-            return;
+        if (amount <= 0) {
+            throw new InvalidAmountException(amount);
         }
-        
-        Transaction result = null;
-        
+
+        if (type == null || type.trim().isEmpty()) {
+            throw new IllegalArgumentException("Transaction type cannot be null or empty");
+        }
+
+        Transaction result;
+
         if (type.equalsIgnoreCase("Deposit")) {
             result = this.deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {
@@ -95,7 +99,12 @@ public abstract class Account {
             result = this.withdrawWithType(amount, "Transfer Out");
         } else if (type.equalsIgnoreCase("Receive")) {
             result = this.depositWithType(amount, "Transfer In");
+        } else {
+            throw new IllegalArgumentException("Invalid transaction type: " + type);
         }
 
+        if (result == null) {
+            throw new IllegalStateException("Transaction failed to process");
+        }
     }
 }

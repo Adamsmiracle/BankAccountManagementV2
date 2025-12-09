@@ -102,4 +102,8 @@ public class Transaction {
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
+
+    public String getTransactionType() {
+        return "";
+    }
 }

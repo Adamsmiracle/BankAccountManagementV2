@@ -17,28 +17,29 @@ public class SavingsAccount extends Account {
         this.setStatus("Active");
         this.minimumBalance = 500.00;
 
-        if (initialDeposit <= 0){
+        if (initialDeposit <= 0) {
             throw new InvalidAmountException(initialDeposit);
         }
 
-        // Set initial balance and log as transaction
-        if (initialDeposit >= minimumBalance) {
-            super.setBalance(initialDeposit);
+        if (initialDeposit < minimumBalance) {
+            throw new InvalidAmountException(
+                    "Initial deposit must be at least $" + minimumBalance,
+                    initialDeposit
+            );
+        }
 
+        super.setBalance(initialDeposit);
 
-            
-            // Log initial deposit as a transaction
-            Transaction initialTransaction = new Transaction(
+        Transaction initialTransaction = new Transaction(
                 this.getAccountNumber(),
                 "Deposit",
                 initialDeposit,
                 initialDeposit
-            );
-            manager.addTransaction(initialTransaction);
-        } else {
-            System.err.println("Initial deposit must be positive and greater or equal to $500.00");
-        }
+        );
+        manager.addTransaction(initialTransaction);
     }
+
+
 
     @Override
     public String getAccountType() {
@@ -52,15 +53,18 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public Transaction deposit(double amount) {
+    public Transaction deposit(double amount) throws InvalidAmountException {
         return depositWithType(amount, "Deposit");
     }
 
     @Override
-    public Transaction depositWithType(double amount, String transactionType) {
+    public Transaction depositWithType(double amount, String transactionType) throws InvalidAmountException {
         if (amount <= 0) {
-            System.out.println("Deposit amount must be positive.");
-            return null;
+            throw new InvalidAmountException(amount);
+        }
+
+        if (transactionType == null || transactionType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Transaction type cannot be null or empty");
         }
 
         this.setBalance(this.getBalance() + amount);
@@ -85,17 +89,21 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public Transaction withdrawWithType(double amount, String transactionType) {
+    public Transaction withdrawWithType(double amount, String transactionType) throws InvalidAmountException, InsufficientFundsException {
         if (amount <= 0) {
-            System.out.println("Withdrawal amount must be positive.");
-            return null;
+            throw new InvalidAmountException(amount);
         }
+
+        if (transactionType == null || transactionType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Transaction type cannot be null or empty");
+        }
+
         double resultingBalance = this.getBalance() - amount;
 
         if (resultingBalance < minimumBalance) {
             throw new InsufficientFundsException(
-                    " Withdrawal failed. Resulting balance " + resultingBalance +
-                            " would violate the minimum balance requirement + "+ minimumBalance + "= .\n"
+                    String.format("Withdrawal failed. Resulting balance ($%.2f) would violate minimum balance requirement ($%.2f)",
+                            resultingBalance, minimumBalance)
             );
         }
 

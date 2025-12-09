@@ -95,7 +95,7 @@ public class StatementGenerator {
         System.out.println("-".repeat(90));
 
         for (int i = 0; i < transactionManager.getTransactionCount(); i++) {
-            Transaction t = transactionManager.transactions[i];
+            Transaction t = transactionManager.getTransaction(i);
 
             System.out.printf("| %-6s | %-12s | %-15s | %-15s | $%-11.2f | $%-11.2f |\n",
                     t.getTransactionId(),

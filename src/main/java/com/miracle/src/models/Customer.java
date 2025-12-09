@@ -13,11 +13,24 @@ public abstract class Customer {
     private String contact;
     private String address;
 
-    public Customer(String name, int age, String contact, String address){
-        this.name = name;
+    public Customer(String name, int age, String contact, String address) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer name cannot be null or empty");
+        }
+        if (age < 18 || age > 120) {
+            throw new IllegalArgumentException("Customer age must be between 18 and 120");
+        }
+        if (contact == null || contact.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer contact cannot be null or empty");
+        }
+        if (address == null || address.trim().isEmpty()) {
+            throw new IllegalArgumentException("Customer address cannot be null or empty");
+        }
+
+        this.name = name.trim();
         this.age = age;
-        this.contact = contact;
-        this.address = address;
+        this.contact = contact.trim();
+        this.address = address.trim();
         this.customerId = String.format("CUS%03d", ++customerCounter);
     }
 

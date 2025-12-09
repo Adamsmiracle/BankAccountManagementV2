@@ -111,8 +111,8 @@ public class TransactionProcessingInput {
 
         Boolean confirmTransaction = InputUtils.readYesNo("Confirm transaction? (Y/N): ");
         if (!confirmTransaction) {
-            System.out.println("Transaction cancelled by user.");
-            return null; // exit fully
+            System.out.println("Transaction cancelled.");
+            return null;
         }
 
         return new TransactionRequest(accountNumber, recipientAccountNumber, transactionType, amount);

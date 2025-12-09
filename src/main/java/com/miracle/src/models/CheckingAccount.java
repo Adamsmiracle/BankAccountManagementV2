@@ -44,10 +44,9 @@ public class CheckingAccount extends Account {
     }
 
     @Override
-    public Transaction deposit(double amount) {
+    public Transaction deposit(double amount) throws InvalidAmountException {
         if (amount <= 0) {
-            System.out.println("The amount must be a positive value");
-            return null;
+            throw new InvalidAmountException(amount);
         }
 
         this.setBalance(this.getBalance() + amount);
@@ -66,35 +65,35 @@ public class CheckingAccount extends Account {
         return "Checking";
     }
 
-    
-    @Override
-    public Transaction withdraw(double amount) {
-        if (amount <= 0) {
-            System.out.println("Withdrawal amount must be positive.");
-            return null;
-        }
-        if (super.getBalance() - amount >= -overDraftLimit) {
-            this.setBalance(this.getBalance() - amount);
 
-            Transaction newTransaction = new Transaction(
+
+    @Override
+    public Transaction withdraw(double amount) throws InvalidAmountException, OverdraftExceededException {
+        if (amount <= 0) {
+            throw new InvalidAmountException(amount);
+        }
+
+        double resultingBalance = this.getBalance() - amount;
+
+        if (resultingBalance < -overDraftLimit) {
+            throw new OverdraftExceededException(this.getBalance(), amount, overDraftLimit);
+        }
+
+        this.setBalance(resultingBalance);
+
+        Transaction newTransaction = new Transaction(
                 this.getAccountNumber(),
                 "Withdrawal",
                 amount,
                 this.getBalance()
-            );
-            manager.addTransaction(newTransaction);
-            
-            System.out.printf("Withdrawal successful. New balance: $%,.2f\n", this.getBalance());
-            return newTransaction;
+        );
+        manager.addTransaction(newTransaction);
 
-        } else {
-            System.out.printf("Withdrawal failed. Resulting balance ($%,.2f) would exceed the overdraft limit ($%,.2f).\n",
-                    (super.getBalance() - amount),
-                    overDraftLimit
-            );
-            return null;
-        }
+        System.out.printf("Withdrawal successful. New balance: $%,.2f\n", this.getBalance());
+        return newTransaction;
     }
+
+
 
     public boolean applyMonthlyFee() {
         Customer c = getCustomer();

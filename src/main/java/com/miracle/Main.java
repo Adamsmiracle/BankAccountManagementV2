@@ -52,8 +52,7 @@ public class Main {
                     break;
 
                 case 4:
-                    // Manage transaction history (menu for all / by account / account details)
-
+                    RunTests.runAllTests();
                     break;
 
                 case 5:
