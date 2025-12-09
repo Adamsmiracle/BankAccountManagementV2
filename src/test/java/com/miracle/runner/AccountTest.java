@@ -1,3 +1,5 @@
+package com.miracle.runner;
+
 import com.miracle.src.models.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

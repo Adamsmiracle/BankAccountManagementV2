@@ -1,3 +1,5 @@
+package com.miracle.runner;
+
 import com.miracle.src.models.Customer;
 import com.miracle.src.services.TransactionManager;
 import org.junit.jupiter.api.Test;

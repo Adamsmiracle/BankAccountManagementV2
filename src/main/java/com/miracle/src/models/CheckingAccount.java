@@ -89,7 +89,6 @@ public class CheckingAccount extends Account {
         );
         manager.addTransaction(newTransaction);
 
-        System.out.printf("Withdrawal successful. New balance: $%,.2f\n", this.getBalance());
         return newTransaction;
     }
 

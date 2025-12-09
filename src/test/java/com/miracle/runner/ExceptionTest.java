@@ -1,3 +1,5 @@
+package com.miracle.runner;
+
 import com.miracle.src.models.exceptions.AccountNotFoundException;
 import com.miracle.src.models.exceptions.InsufficientFundsException;
 import com.miracle.src.models.exceptions.InvalidAmountException;

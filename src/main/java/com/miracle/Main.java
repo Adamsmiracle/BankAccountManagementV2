@@ -12,6 +12,15 @@ import com.miracle.src.services.*;
 
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
+import org.junit.platform.engine.discovery.DiscoverySelectors;
+import org.junit.platform.launcher.Launcher;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
+import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
+import org.junit.platform.launcher.listeners.TestExecutionSummary;
+
+
 
 public class Main {
 //    private static AccountService accountService;
@@ -52,7 +61,7 @@ public class Main {
                     break;
 
                 case 4:
-                    RunTests.runAllTests();
+                    runTest();
                     break;
 
                 case 5:
@@ -156,6 +165,22 @@ public class Main {
         }
     }
 
+
+
+    public static void runTest() {
+        SummaryGeneratingListener listener = new SummaryGeneratingListener();
+
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                .selectors(DiscoverySelectors.selectPackage("com.miracle.runner"))
+                .build();
+
+
+        Launcher launcher = LauncherFactory.create();
+        launcher.execute(request, listener);
+
+        TestExecutionSummary summary = listener.getSummary();
+        summary.printTo(new java.io.PrintWriter(System.out));
+    }
 
 
 }
