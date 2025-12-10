@@ -40,9 +40,9 @@ public class AccountManager {
     //    linear search through the Accounts array to find an account using
 //    the account number
     public Account findAccount(String accountNumber) throws AccountNotFoundException {
-        if (accountNumber == null || accountNumber.trim().isEmpty()) {
-            throw new IllegalArgumentException("Account number cannot be null or empty");
-        }
+//        if (accountNumber == null || accountNumber.trim().isEmpty()) {
+//            System.out.println("Account number cannot be empty");
+//        }
 
         for (int i = 0; i < accountCount; i++) {
             if (accounts[i].getAccountNumber().equalsIgnoreCase(accountNumber)) {

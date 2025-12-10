@@ -208,15 +208,14 @@ public class StatementGenerator {
             return account;
 
         } catch (AccountNotFoundException e) {
-            // Handle missing account gracefully
-            System.out.println("\nERROR: Account not found.");
+            System.out.println("Account not found\n");
             return null;
         }
     }
 
     public static void requestAndGenerateStatement() {
         while (true) {
-            System.out.println("\nEnter account number to view statement (or type 'exit' to return):");
+            System.out.print("\nEnter account number to view statement (or type '0' to return): ");
             String accountNumber = InputUtils.readLine("> ");
 
             if (accountNumber.equalsIgnoreCase("0")) {
@@ -229,9 +228,6 @@ public class StatementGenerator {
 
             if (account != null) {
                 break;
-            } else {
-                // Account not found, loop continues
-                System.out.print("Please try again or type '0' to cancel: ");
             }
         }
     }

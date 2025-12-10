@@ -1,26 +1,39 @@
 package com.miracle.src.handlers;
+
 import com.miracle.src.models.exceptions.AccountNotFoundException;
 import com.miracle.src.models.exceptions.InsufficientFundsException;
 import com.miracle.src.services.AccountManager;
 import com.miracle.src.dto.TransactionRequest;
 import com.miracle.src.models.exceptions.InvalidAmountException;
 import com.miracle.src.models.exceptions.OverdraftExceededException;
-import com.miracle.src.services.*;
 import com.miracle.src.utils.TransactionProcessingInput;
 
-public class TransactionHandler {
-    private static AccountManager manager = AccountManager.getInstance();
-    public TransactionHandler() {
+/**
+ * Handles processing of transactions such as deposits, withdrawals, and transfers.
+ * This class collects transaction input from the user and delegates the transaction
+ * processing to the AccountManager. It handles exceptions that may occur during
+ * the transaction process and provides feedback to the user.
+ */
 
+public class TransactionHandler {
+
+    private static AccountManager manager = AccountManager.getInstance();
+
+    public TransactionHandler() {
     }
 
+    /**
+     * Handles a user-initiated transaction.
+     * This method collects transaction details from the user, processes the transaction
+     * via AccountManager, and handles exceptions such as invalid amounts, overdraft
+     * issues, insufficient funds, or account not found errors. It provides appropriate
+     * console feedback for success or failure of the transaction.
+     */
     public void handleTransaction() {
         try {
-            TransactionProcessingInput transactionProcessingInput = new TransactionProcessingInput();
             TransactionRequest request = TransactionProcessingInput.processTransactionMain();
 
             if (request == null) {
-                System.out.println("Transaction cancelled by user.");
                 return;
             }
 
@@ -28,18 +41,16 @@ public class TransactionHandler {
             System.out.println("✔ Transaction processed successfully!");
 
         } catch (InvalidAmountException e) {
-            System.err.println("Transaction failed: " + e.getMessage());
+            System.out.println("Transaction failed: " + e.getMessage());
         } catch (OverdraftExceededException e) {
-            System.err.println("Transaction failed: " + e.getMessage());
-        } catch (AccountNotFoundException e) {
-            System.err.println("Transaction failed: " + e.getMessage());
+            System.out.println("Transaction failed: " + e.getMessage());
+//        } catch (AccountNotFoundException e) {
+//            System.out.println("Transaction failed: Account Not found");
         } catch (InsufficientFundsException e) {
-            System.err.println("Transaction failed: " + e.getMessage());
+            System.out.println("Transaction failed: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
+            System.out.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
-
 }

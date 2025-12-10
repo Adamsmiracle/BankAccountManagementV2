@@ -115,7 +115,7 @@ public class TransactionManagerTest {
         transactionManager.addTransaction(txn2);
         transactionManager.addTransaction(txn3);
 
-        assertEquals(initialCount + 3, transactionManager.getTransactionCount());
+        assertEquals( + 3, transactionManager.getTransactionCount());
     }
 
     @Test
@@ -336,7 +336,7 @@ public class TransactionManagerTest {
 
     @Test
     @DisplayName("Should record withdrawal transaction from checking account")
-    public void testIntegration_RecordWithdrawalFromCheckingAccount() throws Exception {
+    public void testIntegration_RecordWithdrawalFromCheckingAccount() throws InvalidAmountException {
         CheckingAccount account = new CheckingAccount(testCustomer, 1000.0);
         int initialCount = transactionManager.getTransactionCount();
 

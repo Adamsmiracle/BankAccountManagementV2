@@ -53,11 +53,11 @@ public final class ValidationUtils {
             if (transfer.equalsIgnoreCase("transfer")) {
                 accountNumber = InputUtils.readLine("Enter the recipient's Account Number (or type 'exit' to cancel): ").trim().toUpperCase();
             } else {
-                accountNumber = InputUtils.readLine("Enter User's Account Number (e.g., ACC001) (or type 'exit' to cancel): ").trim().toUpperCase();
+                accountNumber = InputUtils.readLine("Enter User's Account Number (or type '0' to cancel): ").trim().toUpperCase();
             }
 
             // Allow the user to exit
-            if (accountNumber.equalsIgnoreCase("exit")) {
+            if (accountNumber.equalsIgnoreCase("0")) {
                 return "exit";  // return null if user wants to cancel
             }
 

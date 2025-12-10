@@ -89,26 +89,37 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public Transaction withdrawWithType(double amount, String transactionType) throws InvalidAmountException, InsufficientFundsException {
+    public Transaction withdrawWithType(double amount, String transactionType)
+            throws InvalidAmountException, InsufficientFundsException {
+
         if (amount <= 0) {
             throw new InvalidAmountException(amount);
         }
 
+        // Validate transaction type
         if (transactionType == null || transactionType.trim().isEmpty()) {
             throw new IllegalArgumentException("Transaction type cannot be null or empty");
         }
 
+        // Calculate resulting balance
         double resultingBalance = this.getBalance() - amount;
 
+        // Check against minimum balance
         if (resultingBalance < minimumBalance) {
             throw new InsufficientFundsException(
-                    String.format("Withdrawal failed. Resulting balance ($%.2f) would violate minimum balance requirement ($%.2f)",
-                            resultingBalance, minimumBalance)
+                    String.format(
+                            "Withdrawal failed. Resulting balance ($%.2f) would violate minimum balance requirement ($%.2f)",
+                            resultingBalance, minimumBalance
+                    )
             );
         }
 
+
+
+        // Update account balance
         super.setBalance(resultingBalance);
 
+        // Record the transaction
         Transaction newTransaction = new Transaction(
                 this.getAccountNumber(),
                 transactionType,
@@ -116,8 +127,10 @@ public class SavingsAccount extends Account {
                 resultingBalance
         );
         manager.addTransaction(newTransaction);
+
         return newTransaction;
     }
+
 
 
     public double calculateInterest() {

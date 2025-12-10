@@ -40,7 +40,7 @@ public class Main {
         int choice;
         do {
             mainMenu();
-            choice = InputUtils.readInt("Enter choice: ");
+            choice = InputUtils.readInt("Enter choice:> ");
             executeChoice(choice);
         } while (choice != 5);
     }
@@ -70,7 +70,7 @@ public class Main {
                     break;
 
                 case 6:
-                    System.out.println("Exiting application...");
+                    System.out.println("Exiting application... ");
                     return; // exit immediately
 
                 default:
@@ -79,8 +79,6 @@ public class Main {
 
         } catch (InvalidAmountException | OverdraftExceededException e) {
             System.out.println("\nERROR: " + e.getMessage());
-        } catch (AccountNotFoundException e) {
-            System.out.println("\nERROR: Account not found.");
         }
 
         // Pause before returning to menu if not exiting
@@ -105,13 +103,17 @@ public class Main {
 
 
     public static void generateReports() {
-        System.out.println("\n==== TRANSACTION HISTORY MENU ====");
+        System.out.println("-".repeat(50));
+        System.out.println("||            TRANSACTION HISTORY MENU          ||");
+        System.out.println("-".repeat(50));
         System.out.println("1. View ALL Transactions");
         System.out.println("2. View Transactions By Account");
         System.out.println("3. View Account Details");
+        System.out.println("4. Generate Bank Statment");
         System.out.println("0. Back to Main Menu");
+        System.out.println("\n");
 
-        int choice = InputUtils.readInt("Enter choice: ");
+        int choice = InputUtils.readInt("Enter choice:> ");
 
         switch (choice) {
 
@@ -120,16 +122,19 @@ public class Main {
                 break;
 
             case 2:
-                StatementGenerator.requestAndGenerateStatement();   // This already throws/catches exceptions
+                String accountNumber = ValidationUtils.getValidAccountNumber("Enter Account Number:> ");
+                StatementGenerator.viewAllTransactionByAccount(accountNumber);
                 break;
 
             case 3:
-                String accNum = ValidationUtils.getValidAccountNumber("Enter Account Number: ");
-                StatementGenerator.displayAccountDetail(accNum);  // This catches AccountNotFoundException
+                String accNum = ValidationUtils.getValidAccountNumber("Enter Account Number:> ");
+                StatementGenerator.displayAccountDetail(accNum);
                 break;
-
+            case 4:
+                StatementGenerator.requestAndGenerateStatement();
+                break;
             case 0:
-                System.out.println("Returning to main menu...");
+                System.out.println("Returning to main menu... ");
                 return;
 
             default:
@@ -147,7 +152,7 @@ public class Main {
             System.out.println("2. View Accounts");
             System.out.println("3. Display All customers");
 
-            int choice = InputUtils.readInt("Select option (1-3): ");
+            int choice = InputUtils.readInt("Select option (1-3):> ");
             System.out.println("\n");
 
             if (choice == 1) {
