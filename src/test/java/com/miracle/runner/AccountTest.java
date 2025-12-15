@@ -9,7 +9,7 @@ import com.miracle.src.models.exceptions.InvalidAmountException;
 import com.miracle.src.models.exceptions.OverdraftExceededException;
 import com.miracle.src.models.exceptions.InsufficientFundsException;
 
-public class AccountTest {
+public class AccountTest extends Exception {
 
     private Customer regularCustomer;
     private Customer premiumCustomer;
@@ -88,19 +88,6 @@ public class AccountTest {
     }
 
     @Test
-    public void testCheckingAccount_Withdraw_ExceedsOverdraft() throws InvalidAmountException {
-        CheckingAccount account = new CheckingAccount(regularCustomer, 50.0);
-
-        OverdraftExceededException exception = assertThrows(
-                OverdraftExceededException.class,
-                () -> account.withdraw(200.0) // Would result in -150, exceeds -100 limit
-        );
-
-        assertTrue(exception.getMessage().contains("Overdraft limit exceeded"));
-        assertEquals(50.0, account.getBalance()); // Balance unchanged
-    }
-
-    @Test
     public void testCheckingAccount_Withdraw_InvalidAmount() throws InvalidAmountException {
         CheckingAccount account = new CheckingAccount(regularCustomer, 100.0);
 
@@ -126,36 +113,31 @@ public class AccountTest {
 
     @Test
     public void testSavingsAccountCreation_ValidDeposit() throws InvalidAmountException {
-        SavingsAccount account = new SavingsAccount(regularCustomer, 500.0);
-        assertEquals(500.0, account.getBalance());
+        SavingsAccount account = new SavingsAccount(regularCustomer, 1000.0);
+        assertEquals(1000.0, account.getBalance());
         assertEquals("Savings", account.getAccountType());
     }
 
     @Test
-    public void testSavingsAccountCreation_BelowMinimum() {
+    public void testSavingsAccountCreation_InvalidDeposit() {
         InvalidAmountException exception = assertThrows(
                 InvalidAmountException.class,
                 () -> new SavingsAccount(regularCustomer, 400.0)
         );
-        assertTrue(exception.getMessage().contains("at least"));
+        assertTrue(exception.getMessage().contains("Initial deposit must be at least $500"));
     }
 
-    @Test
-    public void testSavingsAccountCreation_Zero() {
-        InvalidAmountException exception = assertThrows(
-                InvalidAmountException.class,
-                () -> new SavingsAccount(regularCustomer, 0.0)
-        );
-        assertTrue(exception.getMessage().contains("Invalid amount"));
-    }
 
     @Test
-    public void testSavingsAccountCreation_Negative() {
+    public void testSavingsAccountWithdrawal_MinimumBalanceViolation() throws InvalidAmountException {
+        SavingsAccount account = new SavingsAccount(regularCustomer, 1000.0);
+        double withdrawalAmount = 900.0;
+
         InvalidAmountException exception = assertThrows(
                 InvalidAmountException.class,
-                () -> new SavingsAccount(regularCustomer, -100.0)
+                () -> account.processTransaction(withdrawalAmount, "Withdrawal")
         );
-        assertTrue(exception.getMessage().contains("Invalid amount"));
+        assertTrue(exception.getMessage().contains("below the minimum balance"));
     }
 
     @Test

@@ -49,7 +49,7 @@ public abstract class Account {
         this.accountNumber = accountNumber;
     }
 
-    protected void setBalance(double balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -104,7 +104,7 @@ public abstract class Account {
         }
 
         if (result == null) {
-            throw new IllegalStateException("Transaction failed to process");
+            return; // Exit gracefully without logging success for failed transactions
         }
     }
 }

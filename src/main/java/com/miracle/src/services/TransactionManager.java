@@ -1,38 +1,68 @@
+// In TransactionManager.java, replace the entire content with:
 package com.miracle.src.services;
 
 import com.miracle.src.models.Account;
 import com.miracle.src.models.Transaction;
+import com.miracle.src.models.exceptions.TransactionFailedException;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Stack;
 
 public class TransactionManager {
-
-    // Singleton instance
     private static final TransactionManager INSTANCE = new TransactionManager();
+    private final ThreadLocal<Stack<TransactionContext>> transactionStack =
+            ThreadLocal.withInitial(Stack::new);
     private final int MAX_TRANSACTION = 200;
+    private final Transaction[] transactions = new Transaction[MAX_TRANSACTION];
+    private int transactionCount = 0;
 
-//    static method for getting the instance of the singleton class.
     public static TransactionManager getInstance() {
         return INSTANCE;
     }
 
-    public List<Transaction> getTransactionsByAccount(String accountNumber) {
-        sortTransactions();
-        return Arrays.stream(transactions, 0, transactionCount)
-                .filter(t -> t.getAccountNumber().equalsIgnoreCase(accountNumber))
-                .toList();
+    private TransactionManager() {}
+
+    // Transaction Management Methods
+    public void beginTransaction(Account... accounts) {
+        TransactionContext context = new TransactionContext();
+        context.begin(accounts);
+        transactionStack.get().push(context);
     }
 
-//    Ensures only one instance can be created.
-    private TransactionManager() {
+    public void commit() throws TransactionFailedException {
+        TransactionContext context = getCurrentContext();
+        try {
+            context.commit();
+            transactionStack.get().pop();
+        } catch (Exception e) {
+            rollback();
+            throw new TransactionFailedException("Transaction commit failed", e);
+        }
     }
 
+    public void rollback() {
+        if (!transactionStack.get().isEmpty()) {
+            TransactionContext context = transactionStack.get().pop();
+            if (context != null && !context.isCompleted()) {
+                context.rollback();
+            }
+        }
+    }
 
-    final Transaction[] transactions = new Transaction[MAX_TRANSACTION];
-    private int transactionCount = 0;
+    public TransactionContext getCurrentContext() {
+        if (transactionStack.get().isEmpty()) {
+            throw new IllegalStateException("No active transaction");
+        }
+        return transactionStack.get().peek();
+    }
 
+    public boolean isInTransaction() {
+        return !transactionStack.get().isEmpty();
+    }
+
+    // Transaction Storage Methods
     public void addTransaction(Transaction transaction) {
         if (transaction == null) {
             throw new IllegalArgumentException("Transaction cannot be null");
@@ -40,11 +70,28 @@ public class TransactionManager {
 
         if (transactionCount >= transactions.length) {
             throw new IllegalStateException(
-                    "Transaction Manager storage limit reached (" + MAX_TRANSACTION + "). Cannot record new transaction."
+                    "Transaction Manager storage limit reached (" + MAX_TRANSACTION +
+                            "). Cannot record new transaction."
             );
         }
 
         transactions[transactionCount++] = transaction;
+    }
+
+    public List<Transaction> getTransactionsByAccount(String accountNumber) {
+        sortTransactions();
+        return Arrays.stream(transactions, 0, transactionCount)
+                .filter(t -> t != null && t.getAccountNumber().equalsIgnoreCase(accountNumber))
+                .toList();
+    }
+
+
+
+    public void sortTransactions() {
+        // Sort transactions by timestamp (most recent first)
+        Arrays.sort(transactions, 0, transactionCount,
+                Comparator.nullsLast(Comparator.comparing(Transaction::getTimestamp).reversed())
+        );
     }
 
     // In TransactionManager.java
@@ -55,13 +102,7 @@ public class TransactionManager {
         return transactions[index];
     }
 
-    public int getTransactionCount(){
+    public int getTransactionCount() {
         return transactionCount;
-    }
-
-    public void sortTransactions() {
-        Arrays.sort(transactions, 0, transactionCount,
-                Comparator.comparing(Transaction::getTimestamp).reversed()
-        );
     }
 }

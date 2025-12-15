@@ -1,6 +1,7 @@
 package com.miracle.runner;
 
 import com.miracle.src.models.Customer;
+import com.miracle.src.models.exceptions.OverdraftExceededException;
 import com.miracle.src.services.TransactionManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -336,7 +337,7 @@ public class TransactionManagerTest {
 
     @Test
     @DisplayName("Should record withdrawal transaction from checking account")
-    public void testIntegration_RecordWithdrawalFromCheckingAccount() throws InvalidAmountException {
+    public void testIntegration_RecordWithdrawalFromCheckingAccount() throws InvalidAmountException, OverdraftExceededException {
         CheckingAccount account = new CheckingAccount(testCustomer, 1000.0);
         int initialCount = transactionManager.getTransactionCount();
 
@@ -518,5 +519,44 @@ public class TransactionManagerTest {
         // Original transaction data should be unchanged
         assertEquals(id1, txn1.getTransactionId());
         assertEquals(amount1, txn1.getAmount(), 0.01);
+    }
+
+    @Test
+    @DisplayName("Test deposit transaction")
+    public void testDepositTransaction() throws Exception {
+        double initialBalance = testAccount.getBalance();
+        double depositAmount = 500.0;
+
+        transactionManager.beginTransaction(testAccount, null);
+        testAccount.processTransaction(depositAmount, "Deposit");
+        transactionManager.commit();
+
+        assertEquals(initialBalance + depositAmount, testAccount.getBalance());
+    }
+
+    @Test
+    @DisplayName("Test withdrawal transaction")
+    public void testWithdrawalTransaction() throws Exception {
+        double initialBalance = testAccount.getBalance();
+        double withdrawalAmount = 200.0;
+
+        transactionManager.beginTransaction(testAccount, null);
+        testAccount.processTransaction(withdrawalAmount, "Withdrawal");
+        transactionManager.commit();
+
+        assertEquals(initialBalance - withdrawalAmount, testAccount.getBalance());
+    }
+
+    @Test
+    @DisplayName("Test overdraft limit exceeded")
+    public void testOverdraftLimitExceeded() {
+        double withdrawalAmount = testAccount.getBalance() + 2000.0;
+
+        OverdraftExceededException exception = assertThrows(
+            OverdraftExceededException.class,
+            () -> testAccount.processTransaction(withdrawalAmount, "Withdrawal")
+        );
+
+        assertTrue(exception.getMessage().contains("Overdraft limit exceeded"));
     }
 }

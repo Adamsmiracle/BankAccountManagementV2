@@ -44,8 +44,8 @@ public class AccountCreationInput {
             while (true) {
                 try {
                     System.out.println("Customer type: ");
-                    System.out.println("1. Regular Customer");
-                    System.out.println("2. Premium Customer (Min balance $10,000)");
+                    System.out.println("1. Regular Customer (Standard banking services)");
+                    System.out.println("2. Premium Customer (Enhanced benefits, min balance $10,000)");
                     customerType = InputUtils.readInt("Select customer type (1-2): ");
 
                     if (customerType == 1 || customerType == 2) break;
@@ -63,8 +63,8 @@ public class AccountCreationInput {
             while (true) {
                 try {
                     System.out.println("Account type: ");
-                    System.out.println("1. Savings Account");
-                    System.out.println("2. Checking Account");
+                    System.out.println("1. Savings Account (Interest: 3.5%, Min balance: $500)");
+                    System.out.println("2. Checking Account (Overdraft: $1000, Monthly fee: $10)");
                     accountType = InputUtils.readInt("Select account type (1-2): ");
 
                     if (accountType == 1 || accountType == 2) break;
@@ -80,10 +80,16 @@ public class AccountCreationInput {
                 try {
                     initialDeposit = ValidationUtils.getValidAmount("Enter initial deposit: ");
 
-                    if (accountType == 1 && initialDeposit < SavingsAccount.getMinimumBalance()) {
+                    if (customerType == 2 && initialDeposit < 10000.00) {
+                        System.out.println("Premium customers require minimum initial deposit of $10,000.00\n");
+                        continue;
+
+                    }
+                    else if (accountType == 1 && initialDeposit < SavingsAccount.getMinimumBalance()) {
                         System.out.println("Savings account requires minimum initial deposit of $500.00\n");
                         continue;
                     }
+                    
                     break;
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.out.println("Enter a valid numeric amount\n");

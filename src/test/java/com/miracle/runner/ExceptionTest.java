@@ -4,6 +4,7 @@ import com.miracle.src.models.exceptions.AccountNotFoundException;
 import com.miracle.src.models.exceptions.InsufficientFundsException;
 import com.miracle.src.models.exceptions.InvalidAmountException;
 import com.miracle.src.models.exceptions.OverdraftExceededException;
+import com.miracle.src.models.exceptions.TransactionFailedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
@@ -182,10 +183,11 @@ public class ExceptionTest {
     }
 
     @Test
-    @DisplayName("InsufficientFundsException should be a RuntimeException (unchecked)")
-    public void testInsufficientFundsException_IsRuntimeException() {
-        InsufficientFundsException exception = new InsufficientFundsException("Test");
-        assertTrue(exception instanceof RuntimeException);
+    @DisplayName("InsufficientFundsException should be a checked exception")
+    public void testInsufficientFundsException_IsCheckedException() {
+        Exception exception = new InsufficientFundsException("Test message");
+        assertTrue(exception instanceof Exception);
+        assertFalse(exception instanceof RuntimeException);
     }
 
     @Test
@@ -237,10 +239,12 @@ public class ExceptionTest {
     }
 
     @Test
-    @DisplayName("AccountNotFoundException should be a RuntimeException (unchecked)")
-    public void testAccountNotFoundException_IsRuntimeException() {
-        AccountNotFoundException exception = new AccountNotFoundException("ACC001");
-        assertTrue(exception instanceof RuntimeException);
+    @DisplayName("AccountNotFoundException should contain correct account number in message")
+    public void testAccountNotFoundException_MessageContainsAccountNumber2() {
+        AccountNotFoundException exception = new AccountNotFoundException("ACC123");
+
+        assertTrue(exception.getMessage().contains("ACC123"));
+        assertTrue(exception.getMessage().contains("Account not found"));
     }
 
     // ==================== EXCEPTION HIERARCHY TESTS ====================
@@ -257,17 +261,17 @@ public class ExceptionTest {
 //        assertFalse(ex2 instanceof RuntimeException);
 //    }
 
-    @Test
-    @DisplayName("Unchecked exceptions should extend RuntimeException")
-    public void testUncheckedExceptions_ExtendRuntimeException() {
-        InsufficientFundsException ex1 = new InsufficientFundsException("Test");
-        assertTrue(ex1 instanceof RuntimeException);
-        assertTrue(ex1 instanceof Exception);
-
-        AccountNotFoundException ex2 = new AccountNotFoundException("ACC001");
-        assertTrue(ex2 instanceof RuntimeException);
-        assertTrue(ex2 instanceof Exception);
-    }
+//    @Test
+//    @DisplayName("Unchecked exceptions should extend RuntimeException")
+//    public void testUncheckedExceptions_ExtendRuntimeException() {
+//        InsufficientFundsException ex1 = new InsufficientFundsException("Test");
+//        assertTrue(ex1 instanceof RuntimeException);
+//        assertTrue(ex1 instanceof Exception);
+//
+//        AccountNotFoundException ex2 = new AccountNotFoundException("ACC001");
+//        assertTrue(ex2 instanceof RuntimeException);
+//        assertTrue(ex2 instanceof Exception);
+//    }
 
     // ==================== EXCEPTION COMPARISON TESTS ====================
 
@@ -366,22 +370,13 @@ public class ExceptionTest {
     }
 
     @Test
-    @DisplayName("Should be able to catch InsufficientFundsException as RuntimeException")
-    public void testCatchInsufficientFundsAsRuntimeException() {
-        try {
-            throw new InsufficientFundsException("Test");
-        } catch (RuntimeException e) {
-            assertTrue(e instanceof InsufficientFundsException);
-        }
-    }
-
-    @Test
     @DisplayName("Should be able to catch AccountNotFoundException as RuntimeException")
     public void testCatchAccountNotFoundAsRuntimeException() {
         try {
             throw new AccountNotFoundException("ACC001");
-        } catch (RuntimeException e) {
+        } catch (AccountNotFoundException e) {
             assertTrue(e instanceof AccountNotFoundException);
+
         }
     }
 
@@ -478,4 +473,22 @@ public class ExceptionTest {
         assertTrue(exception.getMessage().contains("Invalid"));
     }
 
+    @Test
+    @DisplayName("TransactionFailedException should contain correct message")
+    public void testTransactionFailedException_Message() {
+        TransactionFailedException exception = new TransactionFailedException("Transaction failed");
+
+        assertEquals("Transaction failed", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("OverdraftExceededException should contain correct details in message")
+    public void testOverdraftExceededException_MessageContainsDetails() {
+        OverdraftExceededException exception = new OverdraftExceededException(100.0, 200.0, 50.0);
+
+        assertTrue(exception.getMessage().contains("Overdraft limit exceeded"));
+        assertTrue(exception.getMessage().contains("Balance: $100.00"));
+        assertTrue(exception.getMessage().contains("Withdrawal: $200.00"));
+        assertTrue(exception.getMessage().contains("overdraft limit of $50.00"));
+    }
 }

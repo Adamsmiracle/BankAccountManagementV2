@@ -1,12 +1,29 @@
 package com.miracle.src.models.exceptions;
 
-//extend the exception
-public class InsufficientFundsException extends RuntimeException {
+// Extend the base Exception class instead of RuntimeException
+public class InsufficientFundsException extends Exception {
+    private final double currentBalance;
+    private final double requiredAmount;
 
-    public InsufficientFundsException(String message) {
-        super(message);
+    public InsufficientFundsException(double currentBalance, double requiredAmount) {
+        super(String.format("Insufficient funds. Current balance: $%.2f, Required: $%.2f", currentBalance, requiredAmount));
+        this.currentBalance = currentBalance;
+        this.requiredAmount = requiredAmount;
     }
 
+    public InsufficientFundsException(String customMessage) {
+        super(customMessage);
+        this.currentBalance = 0.0; // Default value
+        this.requiredAmount = 0.0; // Default value
+    }
+
+    public double getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public double getRequiredAmount() {
+        return requiredAmount;
+    }
 }
 
 

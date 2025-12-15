@@ -38,16 +38,14 @@ public class TransactionHandler {
             }
 
             manager.processTransaction(request);
-            System.out.println("✔ Transaction processed successfully!");
+            // System.out.println("✔ Transaction processed successfully!");
 
         } catch (InvalidAmountException e) {
             System.out.println("Transaction failed: " + e.getMessage());
         } catch (OverdraftExceededException e) {
             System.out.println("Transaction failed: " + e.getMessage());
-//        } catch (AccountNotFoundException e) {
-//            System.out.println("Transaction failed: Account Not found");
-        } catch (InsufficientFundsException e) {
-            System.out.println("Transaction failed: " + e.getMessage());
+        } catch (AccountNotFoundException e) {
+            System.out.println("Transaction failed: Account not found.");
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();

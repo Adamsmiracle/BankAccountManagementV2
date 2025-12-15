@@ -1,5 +1,7 @@
 package com.miracle.src.models;
 
+import com.miracle.src.services.AccountManager;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -98,6 +100,10 @@ public class Transaction {
     public void setBalanceAfter(double balanceAfter) {
         this.balanceAfter = balanceAfter;
     }
+
+
+
+
 
     public LocalDateTime getTimestamp() {
         return timestamp;

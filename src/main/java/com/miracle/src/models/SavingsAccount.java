@@ -1,6 +1,5 @@
 package com.miracle.src.models;
 
-import com.miracle.src.models.exceptions.InsufficientFundsException;
 import com.miracle.src.models.exceptions.InvalidAmountException;
 import com.miracle.src.services.TransactionManager;
 
@@ -8,15 +7,11 @@ public class SavingsAccount extends Account {
 
     // --- Private Fields
     private final double interestRate;
-    private static double minimumBalance = 500.00;
+    private final static double minimumBalance = 500.00;
     private final TransactionManager manager = TransactionManager.getInstance();
 
     public SavingsAccount(Customer customer, double initialDeposit) throws InvalidAmountException {
-        super(customer);
-        this.interestRate = 0.035;
-        this.setStatus("Active");
-        this.minimumBalance = 500.00;
-
+        // 1. VALIDATE EVERYTHING FIRST (before changing ANY state)
         if (initialDeposit <= 0) {
             throw new InvalidAmountException(initialDeposit);
         }
@@ -27,16 +22,22 @@ public class SavingsAccount extends Account {
                     initialDeposit
             );
         }
-
+        super(customer);  // Creates account
+        this.interestRate = 0.035;
+        this.setStatus("Active");
         super.setBalance(initialDeposit);
 
-        Transaction initialTransaction = new Transaction(
-                this.getAccountNumber(),
-                "Deposit",
-                initialDeposit,
-                initialDeposit
-        );
-        manager.addTransaction(initialTransaction);
+        try {
+            Transaction initialTransaction = new Transaction(
+                    this.getAccountNumber(),
+                    "Deposit",
+                    initialDeposit,
+                    initialDeposit
+            );
+            manager.addTransaction(initialTransaction);
+        } catch (Exception e) {
+            System.out.println("Account Creation failed");
+        }
     }
 
 
@@ -81,7 +82,7 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public Transaction withdraw(double amount) throws InsufficientFundsException, InvalidAmountException {
+    public Transaction withdraw(double amount) throws InvalidAmountException {
         if (amount <= 0){
             throw new InvalidAmountException(amount);
         }
@@ -90,7 +91,7 @@ public class SavingsAccount extends Account {
 
     @Override
     public Transaction withdrawWithType(double amount, String transactionType)
-            throws InvalidAmountException, InsufficientFundsException {
+            throws InvalidAmountException {
 
         if (amount <= 0) {
             throw new InvalidAmountException(amount);
@@ -106,12 +107,25 @@ public class SavingsAccount extends Account {
 
         // Check against minimum balance
         if (resultingBalance < minimumBalance) {
-            throw new InsufficientFundsException(
-                    String.format(
-                            "Withdrawal failed. Resulting balance ($%.2f) would violate minimum balance requirement ($%.2f)",
-                            resultingBalance, minimumBalance
-                    )
-            );
+            java.util.Scanner scanner = new java.util.Scanner(System.in);
+            while (true) {
+                System.out.printf(
+                    "Transaction failed: Withdrawal of $%.2f would result in a balance of $%.2f, which is below the minimum balance of $%.2f.\n",
+                    amount, resultingBalance, minimumBalance
+                );
+                System.out.println("Please enter a new amount that will not violate the minimum balance, or type 0 to go back:");
+                double newAmount = scanner.nextDouble();
+
+                if (newAmount == 0) {
+                    return null; // Exit the transaction
+                }
+
+                resultingBalance = this.getBalance() - newAmount;
+                if (resultingBalance >= minimumBalance) {
+                    amount = newAmount; // Update the amount to the valid value
+                    break;
+                }
+            }
         }
 
 

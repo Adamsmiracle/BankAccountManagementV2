@@ -6,8 +6,9 @@ import com.miracle.src.services.TransactionManager;
 
 public class CheckingAccount extends Account {
 
-    private final double overDraftLimit = 100.00;
+    private double overDraftLimit = 1000.00; // Updated overdraft limit to $1000.00
     private final double monthlyFee = 10.00;
+    private final double minimumBalance = 50.00; // Minimum balance requirement
     private double initialDeposit;
     private final TransactionManager manager = TransactionManager.getInstance();
 
@@ -75,20 +76,26 @@ public class CheckingAccount extends Account {
 
         double resultingBalance = this.getBalance() - amount;
 
+        if (amount > this.getBalance() + overDraftLimit) {
+            throw new OverdraftExceededException(this.getBalance(), amount, overDraftLimit);
+        }
+
+        // if (resultingBalance < minimumBalance) {
+        //     throw new OverdraftExceededException(this.getBalance(), amount, minimumBalance);
+        // }
+
         if (resultingBalance < -overDraftLimit) {
             throw new OverdraftExceededException(this.getBalance(), amount, overDraftLimit);
         }
 
         this.setBalance(resultingBalance);
-
         Transaction newTransaction = new Transaction(
                 this.getAccountNumber(),
                 "Withdrawal",
-                amount,
+                -amount,
                 this.getBalance()
         );
         manager.addTransaction(newTransaction);
-
         return newTransaction;
     }
 
@@ -114,6 +121,10 @@ public class CheckingAccount extends Account {
 
     public double getOverDraftLimit() {
         return overDraftLimit;
+    }
+
+    public double getMinimumBalance() {
+        return minimumBalance;
     }
 
 
@@ -147,14 +158,20 @@ public class CheckingAccount extends Account {
         double resultingBalance = this.getBalance() - amount;
 
         if (resultingBalance < -getOverDraftLimit()) {
-            throw new OverdraftExceededException(this.getBalance(), amount, getOverDraftLimit());
-//            System.out.printf(
-//                    " Withdrawal failed. Resulting balance ($%.2f)" +
-//                            " would violate the overdraft requirement ($%.2f).\n",
-//                    resultingBalance,
-//                    this.getOverDraftLimit()
-//            );
-//            return null;
+            throw new OverdraftExceededException(
+                this.getBalance(),
+                amount,
+                getOverDraftLimit()
+            );
+        }
+
+        if (amount > this.getBalance() + overDraftLimit) {
+            throw new OverdraftExceededException(this.getBalance(), amount, overDraftLimit);
+        }
+
+        // Ensure overdraft limit is dynamically adjustable
+        if (getCustomer() instanceof PremiumCustomer) {
+            this.overDraftLimit = 200.00; // Example adjustment for premium customers
         }
 
         super.setBalance(resultingBalance);

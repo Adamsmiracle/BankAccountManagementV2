@@ -39,6 +39,8 @@ public class StatementGenerator {
 
             double accountDeposits = 0.0;
             double accountWithdrawals = 0.0;
+            double accountTransfersOuts = 0.0;
+            double accountTransfersIns = 0.0;
             int matchedCount = 0;
 
             Transaction[] transactions = transactionManager.getTransactionsByAccount(accountNumber).toArray(new Transaction[0]);
@@ -62,6 +64,10 @@ public class StatementGenerator {
                         accountDeposits += t.getAmount();
                     } else if (t.getType().equalsIgnoreCase("WITHDRAWAL") || t.getType().equalsIgnoreCase("Transfer Out")) {
                         accountWithdrawals += t.getAmount();
+                    } else if (t.getType().equalsIgnoreCase("TRANSFER OUT")) {
+                        accountTransfersOuts += t.getAmount();
+                    } else if (t.getType().equalsIgnoreCase("TRANSFER IN")) {
+                        accountTransfersIns += t.getAmount();
                     }
                 }
             }
@@ -72,12 +78,11 @@ public class StatementGenerator {
                 System.out.println("| No transactions found for this account.                                      |");
                 System.out.println("-".repeat(85));
             } else {
+                double net = accountDeposits + accountTransfersIns - accountWithdrawals - accountTransfersOuts;
                 System.out.printf("\nTotal Transactions: %d\n", matchedCount);
                 System.out.printf("Total Deposits/Transfers In: $%,.2f\n", accountDeposits);
                 System.out.printf("Total Withdrawals/Transfers Out: $%,.2f\n", accountWithdrawals);
-                double net = accountDeposits - accountWithdrawals;
                 System.out.printf("Net Change: $%,.2f\n", net);
-                System.out.printf("Total Bank Transactions: %d\n", transactionManager.getTransactionCount());
             }
 
         } catch (AccountNotFoundException e) {
@@ -164,8 +169,11 @@ public class StatementGenerator {
             double totalWithdrawals = 0;
             int transactionCount = 0;
 
+            // Sort transactions to display the most recent ones first
             Transaction[] transactions = transactionManager.getTransactionsByAccount(accountNumber)
-                    .toArray(new Transaction[0]);
+                    .stream()
+                    .sorted((t1, t2) -> t2.getTimestamp().compareTo(t1.getTimestamp())) // Sort in descending order
+                    .toArray(Transaction[]::new);
 
             for (Transaction t : transactions) {
                 System.out.printf("| %-6s | %-20s | %-15s | $%-11.2f | $%-12.2f |\n",
@@ -194,7 +202,7 @@ public class StatementGenerator {
                 System.out.println("| No transactions found for this account.                                  |");
                 System.out.println("=".repeat(85));
             } else {
-                double net = totalDeposits - totalWithdrawals;
+                double net = totalDeposits +  - totalWithdrawals;
 
                 System.out.println("\nSUMMARY");
                 System.out.println("-".repeat(40));
@@ -219,8 +227,8 @@ public class StatementGenerator {
             String accountNumber = InputUtils.readLine("> ");
 
             if (accountNumber.equalsIgnoreCase("0")) {
-                System.out.println("Returning to previous menu...");
-                break;
+                System.out.println("Returning to main menu...");
+                return; // Exit the method to return to the main menu
             }
 
             // Attempt to generate statement

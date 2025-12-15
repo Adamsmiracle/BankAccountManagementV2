@@ -55,11 +55,41 @@ public final class InputUtils {
     }
 
 
-    public static double validateAmount(){
-
-        return 0.00;
+public static void show(String message, int seconds) {
+        String[] frames = {"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"};
+        Thread spinnerThread = new Thread(() -> {
+            int frameIndex = 0;
+            long endTime = System.currentTimeMillis() + (seconds * 1000L);
+            
+            System.out.print("\n" + message + " ");
+            
+            while (System.currentTimeMillis() < endTime) {
+                System.out.print("\r" + message + " " + frames[frameIndex]);
+                frameIndex = (frameIndex + 1) % frames.length;
+                
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+            
+            System.out.println("\r" + message + " ✓");
+        });
+        
+        spinnerThread.start();
+        
+        try {
+            spinnerThread.join();
+        } catch (InterruptedException e) {
+            spinnerThread.interrupt();
+            Thread.currentThread().interrupt();
+        }
     }
+    
 
+    
 
 
 }

@@ -65,12 +65,7 @@ public class Main {
                     break;
 
                 case 5:
-                    // Display all customers
-                    accountManager.displayAllCustomers();
-                    break;
-
-                case 6:
-                    System.out.println("Exiting application... ");
+                    System.out.println("\nExiting application... \n");
                     return; // exit immediately
 
                 default:
@@ -110,6 +105,7 @@ public class Main {
         System.out.println("2. View Transactions By Account");
         System.out.println("3. View Account Details");
         System.out.println("4. Generate Bank Statment");
+        System.out.println("5. View all customers");
         System.out.println("0. Back to Main Menu");
         System.out.println("\n");
 
@@ -132,6 +128,9 @@ public class Main {
                 break;
             case 4:
                 StatementGenerator.requestAndGenerateStatement();
+                break;
+            case 5:
+                accountManager.displayAllCustomers();
                 break;
             case 0:
                 System.out.println("Returning to main menu... ");

@@ -11,7 +11,7 @@ public class TransactionProcessingInput {
 
     private TransactionProcessingInput() {}
 
-    public static TransactionRequest processTransactionMain() {
+    public static TransactionRequest processTransactionMain() throws InterruptedException {
         System.out.println("\nPROCESS TRANSACTION");
         System.out.println("=".repeat(63));
         System.out.println();
@@ -80,9 +80,10 @@ public class TransactionProcessingInput {
 
                 try {
                     recipientAccount = accountManager.findAccount(recipientAccountNumber);
-                    break; // valid recipient
+                    break;
                 } catch (Exception e) {
-                    return null;
+                    System.out.println("Recipient account not found. Try again!");
+                    continue;
                 }
             }
         }
@@ -100,7 +101,8 @@ public class TransactionProcessingInput {
             double resultingBalance = "Deposit".equalsIgnoreCase(transactionType) ?
                     previousBalance + amount : previousBalance - amount;
 
-            if (resultingBalance < SavingsAccount.getMinimumBalance() &&
+
+            if (senderAccount.getAccountType().equalsIgnoreCase("savingsAccount") && resultingBalance < SavingsAccount.getMinimumBalance() &&
                     !"Deposit".equalsIgnoreCase(transactionType)) {
                 System.out.printf("Amount too high. Transaction would violate minimum balance of $%,.2f. Enter a different amount.\n",
                         SavingsAccount.getMinimumBalance());
@@ -131,8 +133,13 @@ public class TransactionProcessingInput {
         if (!confirm) {
             System.out.println("Transaction cancelled.");
             return null;
+        }else{
+
+            InputUtils.show("processing Transaction...", 3);                
+             TransactionRequest request = new TransactionRequest(senderAccountNumber, recipientAccountNumber, transactionType, amount);
+            System.out.println("Transaction Completed Successfully");
+            return request;
         }
 
-        return new TransactionRequest(senderAccountNumber, recipientAccountNumber, transactionType, amount);
     }
 }

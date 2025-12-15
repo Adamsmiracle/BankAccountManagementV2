@@ -1,6 +1,6 @@
 package com.miracle.src.models.exceptions;
 
-public class AccountNotFoundException extends RuntimeException {
+public class AccountNotFoundException extends Exception {
 
     public AccountNotFoundException(String accountNumber) {
 
